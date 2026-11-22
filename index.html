@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#173b52">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<title>Grand Line Study Quest</title>
+<style>
+:root{--sea:#173b52;--sea2:#245d70;--cream:#f4e8c9;--gold:#f4c45e;--ink:#172c35;--mint:#b8e0cb;--coral:#e98b70}
+*{box-sizing:border-box}body{margin:0;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:linear-gradient(145deg,#173b52 0%,#28677a 48%,#d4b77c 100%);min-height:100vh;padding:16px}
+.app{max-width:760px;margin:auto;background:rgba(248,239,216,.96);border:3px solid #e8c36d;border-radius:24px;overflow:hidden;box-shadow:0 18px 45px #0b263b88}
+.hero{position:relative;color:#fff;padding:24px 20px 18px;background:linear-gradient(180deg,#16384fdd,#1c5667ee),radial-gradient(circle at 80% 10%,#f6d58b,transparent 28%);overflow:hidden}
+.hero:after{content:"";position:absolute;right:-12px;bottom:-30px;width:190px;height:130px;opacity:.34;background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 140'%3E%3Cpath d='M30 100h160l-20 22H55z' fill='%23f5d58d'/%3E%3Cpath d='M105 15v85M110 20l65 58h-65zM98 34L48 78h50z' fill='%23f5d58d'/%3E%3Cpath d='M20 126q25-12 50 0t50 0 50 0 50 0' fill='none' stroke='%23b8e0cb' stroke-width='5'/%3E%3C/svg%3E") center/contain no-repeat}
+.kicker{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#f6d58d;font-weight:800}
+h1{font-size:clamp(25px,6vw,38px);line-height:1.08;margin:7px 0}.subtitle{color:#e7f1e7;font-size:14px;max-width:480px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:18px;position:relative;z-index:1}
+.stat{background:#ffffff18;border:1px solid #ffffff45;border-radius:14px;padding:10px}.stat b{display:block;font-size:21px;color:#ffe09a}.stat span{font-size:11px;color:#edf2e8}
+main{padding:16px}.datebar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap}
+.datebar button,.nav button{border:0;border-radius:11px;padding:9px 12px;background:#dce8dc;color:#173b52;font-weight:750}
+.datebar strong{font-size:16px}
+.progressbox{background:#e4eadb;border-radius:14px;padding:12px;margin-bottom:14px}
+.progressline{height:10px;background:#c8d2c2;border-radius:20px;overflow:hidden;margin:8px 0 5px}
+.progressfill{height:100%;width:0;background:linear-gradient(90deg,#3f927d,#e6b64f);border-radius:20px;transition:width .25s}
+.small{font-size:12px;color:#52645c}
+.sectiontitle{font-size:17px;font-weight:850;margin:17px 0 9px}
+.task{display:flex;gap:11px;align-items:flex-start;padding:13px;margin:9px 0;background:#fffdf6;border:1px solid #e2d7b9;border-radius:14px;box-shadow:0 3px 8px #3c4a3510}
+.task.done{background:#e4f1e5;border-color:#a6cfb1}
+.task input{width:22px;height:22px;accent-color:#368b70;flex-shrink:0;margin-top:2px}
+.tasktext{flex:1}.tasktext b{display:block;font-size:14px}.tasktext small{display:block;color:#68766d;margin-top:3px;line-height:1.35}
+.xp{white-space:nowrap;font-size:12px;font-weight:850;color:#926719;background:#fff0c7;padding:5px 8px;border-radius:20px}
+.reward{padding:14px;border-radius:15px;background:linear-gradient(120deg,#173b52,#28677a);color:#fff;margin-top:15px}
+.reward strong{color:#ffdb87}.reward p{margin:6px 0 0;font-size:13px;line-height:1.4}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.nav button.active{background:#173b52;color:white}
+.footer{text-align:center;padding:14px;color:#62736a;font-size:11px}
+.reset{border:0;background:transparent;color:#718078;text-decoration:underline;font-size:11px;padding:8px}
+@media(max-width:430px){body{padding:7px}.app{border-radius:17px}.hero{padding:20px 15px 15px}main{padding:12px}.stat b{font-size:18px}}
+</style>
+</head>
+<body><div class="app">
+<header class="hero">
+<div class="kicker">Your 20-day adventure begins</div>
+<h1>GRAND LINE<br>STUDY QUEST</h1>
+<div class="subtitle">Every chapter is a new island. Every completed task earns XP. Your mission: conquer the syllabus!</div>
+<div class="stats">
+<div class="stat"><b id="totalXp">0</b><span>Total XP</span></div>
+<div class="stat"><b id="doneCount">0/60</b><span>Tasks cleared</span></div>
+<div class="stat"><b id="daysDone">0/20</b><span>Daily targets met</span></div>
+</div></header>
+<main>
+<div class="datebar"><button id="prev">← Previous</button><strong id="dateLabel">22 November 2026</strong><button id="next">Next →</button></div>
+<div class="progressbox"><div style="display:flex;justify-content:space-between;gap:8px"><b>Today's bounty</b><b id="todayXp">0 / 150 XP</b></div><div class="progressline"><div class="progressfill" id="todayFill"></div></div><div class="small" id="dailyMessage">Complete 3 tasks to claim today's reward.</div></div>
+<div class="nav" id="dayNav"></div>
+<div class="sectiontitle">⚔️ Today's mission list</div>
+<div id="tasks"></div>
+<div class="reward" id="reward"><strong>🎁 Daily reward</strong><p id="rewardText">Your reward will appear here when you reach 150 XP.</p></div>
+<button class="reset" id="reset">Reset all progress</button>
+</main><div class="footer">Built for your study journey • Progress saves on this device</div>
+</div>
+<script>
+const plan=[
+["22 Nov","Domestic electric circuits: revise circuit symbols, series/parallel combinations and safety","Science","Start heredity: introduction, variation and inheritance","Science","Money and Credit: read the chapter introduction and identify the role of money","Economics","Enjoy a 20-minute guilt-free break with your favourite show."],
+["23 Nov","Money and Credit: barter system, double coincidence of wants and modern forms of money","Economics","Heredity: genes, traits, chromosomes and inherited characteristics","Science","Money and Credit: functions of money and use of banks","Economics","Have a favourite snack or a 20-minute entertainment break."],
+["24 Nov","Heredity: Mendel's experiments and dominant/recessive traits","Science","Mineral and Energy Resources: types of minerals and mode of occurrence","Geography","Money and Credit: deposits, loans and basic banking terms","Economics","Take a relaxed 30-minute break."],
+["25 Nov","Heredity: inherited traits, variation and sex determination","Science","Mineral and Energy Resources: distribution and conservation of minerals","Geography","Money and Credit: formal and informal sources of credit","Economics","Listen to music or enjoy a favourite snack."],
+["26 Nov","Heredity: textbook questions, diagrams and chapter recap","Science","Mineral and Energy Resources: conventional and non-conventional energy","Geography","Money and Credit: self-help groups and chapter questions","Economics","Enjoy 30 minutes of guilt-free leisure."],
+["27 Nov","Magnetic Effects of Electric Current: magnetic field and field lines","Science","Manufacturing Industries: importance, contribution and classification","Geography","Manufacturing Industries: factors affecting industrial location","Geography","Take a longer walk or outdoor break."],
+["28 Nov","Magnetism: field around a straight conductor, circular loop and solenoid","Science","Manufacturing Industries: cotton textile and jute industries","Geography","Outcomes of Democracy: introduction and expected outcomes","Civics","Watch one episode or enjoy another planned reward."],
+["29 Nov","Magnetism: force on a current-carrying conductor and Fleming's left-hand rule","Science","Manufacturing Industries: iron and steel, chemical and other key industries","Geography","Outcomes of Democracy: accountable, responsive and legitimate government","Civics","Enjoy a 30-minute hobby break."],
+["30 Nov","Magnetism: electric motor, electromagnetic induction and generator","Science","Manufacturing Industries: industrial pollution, environmental degradation and control","Geography","Outcomes of Democracy: economic growth, inequality and dignity","Civics","Have a favourite treat."],
+["1 Dec","Magnetism: domestic electric circuits recap, diagrams and textbook questions","Science","Outcomes of Democracy: case-based questions and chapter recap","Civics","The Making of a Global World / Globalisation: introduction and basic meaning","Economics","Take a relaxed 30-minute break."],
+["2 Dec","Our Environment: ecosystem, components and food chains/webs","Science","Globalisation: production across countries and multinational corporations","Economics","Print Culture: introduction and print technology in East Asia","History","Enjoy a music or gaming break."],
+["3 Dec","Our Environment: trophic levels, energy flow and biological magnification","Science","Globalisation: factors enabling globalisation and foreign trade","Economics","Print Culture: print comes to Europe, Gutenberg and the print revolution","History","Enjoy a favourite snack and 30 minutes off."],
+["4 Dec","Our Environment: ozone layer, waste management and ecosystem balance","Science","Globalisation: impact on producers, workers and consumers in India","Economics","Print Culture: print culture and the Reformation / religious debates","History","Watch one episode or do a hobby."],
+["5 Dec","Our Environment: textbook questions, diagrams and full chapter recap","Science","Globalisation: fair globalisation and chapter questions","Economics","Print Culture: print culture in India and religious/social reform","History","Take a longer guilt-free break."],
+["6 Dec","Print Culture: print and the spread of new ideas, reading public and women","History","Print Culture: recap, timeline, key terms and textbook questions","History","Syllabus checkpoint: clear any unfinished chapter/topic from the plan","All subjects","Celebrate finishing the syllabus with a favourite activity!"],
+["7 Dec","Revision: Heredity and Our Environment — key concepts and diagrams","Science","Revision: Magnetism — laws, rules, diagrams and numericals","Science","Solve a mixed Science question set and review mistakes","Science","Enjoy a 30-minute episode or hobby break."],
+["8 Dec","Revision: Money and Credit — key terms and case-based questions","Economics","Revision: Globalisation — concepts, examples and questions","Economics","Solve one timed Economics practice set","Economics","Have a favourite snack or take a relaxed break."],
+["9 Dec","Revision: Mineral and Energy Resources — maps, types and conservation","Geography","Revision: Manufacturing Industries — factors, industries and pollution","Geography","Practise map work and geography questions","Geography","Enjoy a 30-minute leisure break."],
+["10 Dec","Revision: Outcomes of Democracy — concepts and examples","Civics","Revision: Print Culture — timeline, people and impact","History","Solve one timed History/Civics practice set","SST","Watch one episode or enjoy a favourite activity."],
+["11 Dec","Final mixed revision: Science weak areas","Science","Final mixed revision: SST weak areas","SST","Take a short mock test, check answers and make a last-minute doubt list","All subjects","You cleared the 20-day quest: plan a bigger celebration!"]
+];
+const rewards=plan.map(x=>x[7]);
+const key='grandline-studyquest-v1';let saved={};try{saved=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}
+let index=0;
+const dates=Array.from({length:20},(_,i)=>new Date(2026,10,22+i));
+const fmt=d=>d.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+function dayXP(i){return [0,2,4].reduce((s,n)=>s+(saved[i+'-'+n]?50:0),0)}
+function render(){
+ const d=dates[index],row=plan[index],xp=dayXP(index),done=Object.keys(saved).filter(k=>saved[k]).length;
+ document.getElementById('dateLabel').textContent=fmt(d);
+ document.getElementById('todayXp').textContent=xp+' / 150 XP';
+ document.getElementById('todayFill').style.width=Math.min(100,xp/150*100)+'%';
+ document.getElementById('dailyMessage').textContent=xp>=150?'Daily target cleared! Your reward is unlocked.':(150-xp)+' XP to go — keep sailing!';
+ document.getElementById('totalXp').textContent=done*50;
+ document.getElementById('doneCount').textContent=done+'/60';
+ document.getElementById('daysDone').textContent=dates.filter((_,i)=>dayXP(i)>=150).length+'/20';
+ document.getElementById('tasks').innerHTML='';
+ for(let j=0;j<3;j++){let k=index+'-'+(j*2),is=!!saved[k];let div=document.createElement('label');div.className='task'+(is?' done':'');div.innerHTML=`<input type="checkbox" ${is?'checked':''}><div class="tasktext"><b>${row[1+j*2]}</b><small>${row[2+j*2]}</small></div><span class="xp">+50 XP</span>`;div.querySelector('input').addEventListener('change',e=>{if(e.target.checked)saved[k]=true;else delete saved[k];localStorage.setItem(key,JSON.stringify(saved));render()});document.getElementById('tasks').appendChild(div)}
+ document.getElementById('rewardText').textContent=xp>=150?'UNLOCKED: '+rewards[index]:'Reach 150 XP today to unlock: '+rewards[index];
+ document.getElementById('reward').style.opacity=xp>=150?'1':'.82';
+ document.getElementById('dayNav').innerHTML='';
+ [0,4,9,14,19].forEach(i=>{let b=document.createElement('button');b.textContent=['Days 1–5','Days 6–10','Days 11–15','Days 16–20'][[0,4,9,14,19].indexOf(i)];if(index>=i&&index<([4,9,14,20][[0,4,9,14,19].indexOf(i)]||20))b.className='active';b.onclick=()=>{index=i;render()};document.getElementById('dayNav').appendChild(b)});
+}
+document.getElementById('prev').onclick=()=>{index=Math.max(0,index-1);render()};
+document.getElementById('next').onclick=()=>{index=Math.min(19,index+1);render()};
+document.getElementById('reset').onclick=()=>{if(confirm('Reset all XP and completed tasks on this device?')){saved={};localStorage.removeItem(key);render()}};
+const now=new Date();const today=dates.findIndex(d=>d.toDateString()===now.toDateString());if(today>=0)index=today;
+render();
+if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {})); }
+</script></body></html>
